@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>こぽこぽ</title>
+  <style>
+    body {
+      background-color: #b8f375;
+    }
+
+    .img-box img {
+      width: 40px;
+      object-fit: cover;
+    }
+
+    #animal-box {
+      position: absolute;
+      top: 0px;
+      left: 40px;
+      margin: 80px auto 80px auto;
+      padding: 10px;
+      width: 360px;
+      background: rgba(253, 82, 2, 0.3);
+      /*background-color: #e3aa8f;*/
+      border-radius: 5px;
+    }
+
+    .invisible {
+      visibility: hidden;
+    }
+
+    .animation {
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: 1;
+      animation-direction: alternate;
+      animation-duration: 0.5s;
+    }
+
+    .display {
+      display: none;
+    }
+
+    .position1 {
+      position: absolute;
+      top: 14px;
+      left: 5px;
+      width: 200px;
+      z-index: 10;
+    }
+
+    .position2 {
+      position: absolute;
+      top: -20px;
+      left: 14px;
+      width: 250px;
+      z-index: 1;
+    }
+
+    .position3 {
+      position: absolute;
+      top: 14px;
+      left: 160px;
+      width: 200px;
+      z-index: 10;
+    }
+
+    .position4 {
+      position: absolute;
+      top: -20px;
+      left: 100px;
+      width: 180px;
+      z-index: 1;
+    }
+
+    .position5 {
+      position: absolute;
+      top: -50px;
+      left: 70px;
+      width: 340px;
+      z-index: 1;
+    }
+
+    .tail {
+      visibility: visible;
+    }
+
+    .target {
+      position: absolute;
+      top: 30px;
+      left: 200px;
+      font-size: 20px;
+      z-index: 11;
+      color: #fff;
+    }
+
+    .target-text {
+      position: absolute;
+      top: 10px;
+      left: 200px;
+      font-size: 20px;
+      z-index: 11;
+      color: #fff;
+    }
+
+    .apple {
+      position: absolute;
+      top: 30px;
+      left: 50px;
+      font-size: 20px;
+      z-index: 11;
+      color: #fff;
+    }
+
+    .apple-text {
+      position: absolute;
+      top: 10px;
+      left: 50px;
+      font-size: 20px;
+      z-index: 11;
+      color: #fff;
+    }
+
+    .pad {
+      padding-right: 5.01025px;
+    }
+
+    @media (max-width: 768px) {
+      .img-box img {
+        width: 30px;
+        object-fit: cover;
+      }
+
+      #animal-box {
+        margin: 80px auto 80px auto;
+        width: 280px;
+      }
+    }
+  </style>
+</head>
+<script>
+  function generateValidList() {
+    let list = new Array(72).fill(0);
+    let hasTriplesHorizontal = true;
+    let hasTriplesVertical = true;
+
+    while (hasTriplesHorizontal || hasTriplesVertical) {
+      // Fill the list with random numbers between 1 and 4
+      for (let c = 0; c < list.length; c++) {
+        list[c] = Math.floor(Math.random() * 4) + 1;
+      }
+
+      hasTriplesHorizontal = false;
+      hasTriplesVertical = false;
+
+      // Check for horizontal triples
+      for (let i = 0; i < list.length - 2; i++) {
+        if (
+          list[i] === list[i + 1] &&
+          list[i] === list[i + 2] &&
+          i % 8 !== 6 &&
+          i % 8 !== 7
+        ) {
+          hasTriplesHorizontal = true;
+          break;
+        }
+      }
+
+      // Check for vertical triples
+      for (let j = 0; j < list.length - 16; j++) {
+        if (
+          list[j] === list[j + 8] &&
+          list[j] === list[j + 16]
+        ) {
+          hasTriplesVertical = true;
+          break;
+        }
+      }
+    }
+
+    return list;
+  }
+
+  let validList = generateValidList();
+  console.log(validList);
+
+</script>
+<!--
+<?php
+$list = array_fill(0, 72, 0);
+do {
+    for ($c = 0; $c <= 71; $c++) {
+        $list[$c] = rand(1, 4);
+    }
+    $check1 = false;
+    $check2 = false;
+    for ($i = 0; $i <= count($list) - 3; $i++) {
+        if ($list[$i] == $list[$i + 1] && $list[$i] == $list[$i + 2] && $i % 8 != 6 && $i % 8 != 7) {
+            $check1 = true;
+            break;
+        }
+    }
+    for ($j = 0; $j <= count($list) - 17; $j++) {
+        if ($list[$j] == $list[$j + 8] && $list[$j] == $list[$j + 16]) {
+            $check2 = true;
+            break;
+        }
+    }
+} while ($check1 == true || $check2 == true);
+?>-->
+
+<body>
+  <p class="target-text" id="target-text">ターゲット</p>
+  <p class="target" id="target">72</p>
+  <p class="apple-text" id="apple-text">残り</p>
+  <p class="apple" id="apple">15</p>
+
+  <img class="position1" src="img/weed.png" alt="" />
+  <img class="position2" src="img/weed.png" alt="" />
+  <img class="position3" src="img/weed.png" alt="" />
+  <img class="position4" src="img/weed.png" alt="" />
+  <img class="position5" src="img/weed.png" alt="" />
+  <div id="animal-box">
+  </div>
+  <script>
+    // 対象の要素を取得
+    const container = document.getElementById('animal-box');
+    let imgHTML = '';
+    for (let i = 0; i <= 8; i++) {
+      imgHTML += `<div class="img-box">`;
+      for (let j = 0; j <= 7; j++) {
+        imgHTML += `<img id="${8 * i + j}" class="animation back-ground pad" src="img/animal${validList[8 * i + j]}.png" alt="" />`;
+      }
+      imgHTML += `</div>`;
+    }
+    for (let i = 0; i <= 8; i++) {
+      for (let j = 0; j <= 7; j++) {
+        t = 6 + 35 * i;
+        l = -0.5 + 35.2 * j
+        imgHTML += `<img class="tail" id="${200 + 8 * i + j}" src="img/tail.png" style="
+        position: absolute;
+        top: ${t}px;
+        left: ${l}px;
+        width: 52px;
+        z-index: -1;" alt="" />`
+      }
+      imgHTML += `</div>`;
+    }
+    container.innerHTML = imgHTML;
+  </script>
+  <!--
+        <?php for ($repeat = 0; $repeat <= 8; $repeat++) : ?>
+            <div class="img-box">
+                <?php for ($val = 0; $val <= 7; $val++) : ?>
+                    <?php $n = $repeat * 8 + $val ?>
+                    <img id="<?php echo $n; ?>" class="animation back-ground" src="<?php echo get_template_directory_uri() ?>/img/animal<?php echo $list[$n] ?>.png" alt="" />
+                <?php endfor; ?>
+            </div>
+        <?php endfor; ?>
+        <?php for ($repeat = 0; $repeat <= 8; $repeat++) : ?>
+            <?php for ($val = 0; $val <= 7; $val++) : ?>
+                <?php $t = 6 + 35 * $repeat; ?>
+                <?php $l = -0.5 + 35.2 * $val; ?>
+                <img class="tail" id="<?php echo 200 + $repeat * 8 + $val; ?>" src="<?php echo get_template_directory_uri() ?>/img/tail.png" style="
+      position: absolute; 
+      top: <?php echo $t; ?>px;
+      left: <?php echo $l; ?>px;
+      width: 52px;
+      z-index: -1;" alt="" />
+            <?php endfor; ?>
+        <?php endfor; ?>
+          -->
+  </div>
+  <!--<img id="100" class="animation display" src="img/blank.png" alt="" />-->
+  <img id="101" class="animation display" src="img/animal1.png" alt="" />
+  <img id="102" class="animation display" src="img/animal2.png" alt="" />
+  <img id="103" class="animation display" src="img/animal3.png" alt="" />
+  <img id="104" class="animation display" src="img/animal4.png" alt="" />
+
+  <script>
+    if (!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+      // スマートフォン以外のデバイスの場合に実行するコード
+    } else {
+      const row = 9;
+      const column = 8;
+      // タッチされた要素のIDを格納する変数
+      let touchedElementId = null;
+      let minimumDistance = 30
+      // スワイプ開始時の座標
+      let startX = 0
+      let startY = 0
+      // スワイプ終了時の座標
+      let endX = 0
+      let endY = 0
+
+      // 解説①：移動を開始した座標を取得
+      window.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX
+        startY = e.touches[0].pageY
+        touchedElementId = e.target.id;
+      });
+
+      // 解説③：移動距離から左右or上下の処理を実行
+      window.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].pageX
+        endY = e.changedTouches[0].pageY
+        // スワイプ終了時にx軸とy軸の移動量を取得
+        // 左スワイプに対応するためMath.abs()で+に変換
+
+        let distanceX = Math.abs(endX - startX)
+        let distanceY = Math.abs(endY - startY) // 修正: endX から endY に変更
+        let intId = parseInt(touchedElementId, 10);
+
+        let validIdsRight = Array.from({
+          length: row
+        }, (_, index) => (index + 1) * column - 1);
+
+        let validIdsLeft = Array.from({
+          length: row
+        }, (_, index) => index * column);
+
+        let validIdsUp = Array.from({
+          length: column
+        }, (_, index) => index);
+
+        let validIdsDown = Array.from({
+          length: column
+        }, (_, index) => index + (row - 1) * column);
+
+        let number = 0;
+        let action = 0;
+
+
+        // 左右のスワイプ距離の方が上下より長い && 小さなスワイプは検知しないようにする
+        if (distanceX > distanceY && distanceX > minimumDistance && endX - startX > 0 && !isNaN(intId) && !validIdsRight.includes(intId)) {
+          // 右スワイプ
+          number = parseInt(touchedElementId, 10) + 1;
+          action = 1;
+          let stringNumber = number.toString();
+          let imageElement = document.getElementById(stringNumber);
+          let newImagePath = imageElement.src;
+          let oldImage = document.getElementById(touchedElementId);
+          let oldImagePath = oldImage.src;
+          startAnimation(action, imageElement, oldImage, newImagePath, oldImagePath);
+        } else if (distanceX > distanceY && distanceX > minimumDistance && endX - startX < 0 && !isNaN(intId) && !validIdsLeft.includes(intId)) {
+          // 左スワイプ
+          number = parseInt(touchedElementId, 10) - 1;
+          action = 2;
+          let stringNumber = number.toString();
+          let imageElement = document.getElementById(stringNumber);
+          let newImagePath = imageElement.src;
+          let oldImage = document.getElementById(touchedElementId);
+          let oldImagePath = oldImage.src;
+          startAnimation(action, imageElement, oldImage, newImagePath, oldImagePath);
+        } else if (distanceX < distanceY && distanceY > minimumDistance && endY - startY < 0 && !isNaN(intId) && !validIdsUp.includes(intId)) {
+          // 上スワイプ
+          number = parseInt(touchedElementId, 10) - 8;
+          action = 3;
+          let stringNumber = number.toString();
+          let imageElement = document.getElementById(stringNumber);
+          let newImagePath = imageElement.src;
+          let oldImage = document.getElementById(touchedElementId);
+          let oldImagePath = oldImage.src;
+          startAnimation(action, imageElement, oldImage, newImagePath, oldImagePath);
+        } else if (distanceX < distanceY && distanceY > minimumDistance && endY - startY > 0 && !isNaN(intId) && !validIdsDown.includes(intId)) {
+          // 下スワイプ
+          number = parseInt(touchedElementId, 10) + 8;
+          action = 4;
+          let stringNumber = number.toString();
+          let imageElement = document.getElementById(stringNumber);
+          let newImagePath = imageElement.src;
+          let oldImage = document.getElementById(touchedElementId);
+          let oldImagePath = oldImage.src;
+          startAnimation(action, imageElement, oldImage, newImagePath, oldImagePath);
+        }
+      });
+
+      function startAnimation(action, imageElement, oldImage, newImagePath, oldImagePath) {
+        let startTime;
+        let back;
+        const duration = 300; // アニメーションの時間（ミリ秒）
+
+        function animate(currentTime) {
+          if (!startTime) {
+            startTime = currentTime;
+          }
+
+          const moving = 36;
+          const elapsed = currentTime - startTime;
+
+
+          // アニメーションの進捗を計算
+          const progress = Math.min(elapsed / duration, 1);
+
+          // translateXの値を計算
+          let translateX = 0;
+          let translate2X = 0;
+          let translateY = 0;
+          let translate2Y = 0;
+          if (action === 1) {
+            translateX = moving * progress;
+            translate2X = -moving * progress;
+          } else if (action === 2) {
+            translateX = -moving * progress;
+            translate2X = moving * progress;
+          } else if (action === 3) {
+            translateY = -moving * progress;
+            translate2Y = moving * progress;
+          } else if (action === 4) {
+            translateY = moving * progress;
+            translate2Y = -moving * progress;
+          }
+
+          // 要素にスタイルを適用
+          oldImage.style.transform = `translate(${translateX}px, ${translateY}px)`;
+          imageElement.style.transform = `translate(${translate2X}px, ${translate2Y}px)`;
+
+          if (progress < 1) {
+            // アニメーションが終了していない場合は再帰呼び出し
+            requestAnimationFrame(animate);
+          } else {
+            if (back === undefined) {
+              oldImage.src = newImagePath;
+              imageElement.src = oldImagePath;
+            } else {
+              oldImage.src = oldImagePath;
+              imageElement.src = newImagePath;
+            }
+            oldImage.style.transform = `translate(0px, 0px)`;
+            imageElement.style.transform = `translate(0px, 0px)`;
+            /*
+                        let intId = parseInt(touchedElementId, 10);
+                        let changeChara = 0;
+                        if (action === 1 && intId !== undefined && back === undefined) {
+                          
+                                        let chara1 = character(1, 0);
+                                        let chara2 = character(1, -8);
+                                        let chara3 = character(1, -16);
+                                        let chara4 = character(1, 8);
+                                        let chara5 = character(1, 16);
+                                        let chara6 = character(2, 0);
+                                        let chara7 = character(3, 0);
+                                        let charablank = document.getElementById(100);
+                                        let blank = charablank.src;
+
+                                        let imageElement1 = element(1, 0);
+                                        let imageElement2 = element(1, -8);
+                                        let imageElement3 = element(1, -16);
+                                        let imageElement4 = element(1, 8);
+                                        let imageElement5 = element(1, 16);
+                                        let imageElement6 = element(2, 0);
+                                        let imageElement7 = element(3, 0);
+
+                                        let validIdsRight2 = Array.from({
+                                          length: row
+                                        }, (_, index) => (index + 1) * column - 2);
+                                        let validIdsRight3 = Array.from({
+                                          length: row
+                                        }, (_, index) => (index + 1) * column - 3);
+
+                                        if (chara1 === chara2 && chara1 === chara3 && chara1 === chara4 && chara1 === chara5 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("縦５つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara3 && chara1 === chara4 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("上四つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara4 && chara1 === chara5 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("下四つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara3 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("上三つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara4 && chara1 === chara5 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("下三つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara4 && chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("真ん中三つ+横三つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara3 && chara1 === chara4 && chara1 === chara5) {
+                                          console.log("縦５つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara3 && chara1 === chara4) {
+                                          console.log("上四つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                          imageElement4.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara4 && chara1 === chara5) {
+                                          console.log("下四つ");
+                                          //imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                          changeChara = 1;
+                                        } else if (chara1 === chara2 && chara1 === chara4) {
+                                          console.log("真ん中三つ");
+                                          imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement4.src = blank;
+                                        } else if (chara1 === chara6 && chara1 === chara7 && !validIdsRight2.includes(intId) && !validIdsRight3.includes(intId)) {
+                                          console.log("横三つ");
+                                          imageElement1.src = blank;
+                                          imageElement6.src = blank;
+                                          imageElement7.src = blank;
+                                        } else if (chara1 === chara2 && chara1 === chara3) {
+                                          console.log("上三つ");
+                                          imageElement1.src = blank;
+                                          imageElement2.src = blank;
+                                          imageElement3.src = blank;
+                                        } else if (chara1 === chara4 && chara1 === chara5) {
+                                          console.log("下三つ");
+                                          imageElement1.src = blank;
+                                          imageElement4.src = blank;
+                                          imageElement5.src = blank;
+                                        } else {
+                                          back = 1;
+                                          startTime = currentTime;
+                                          requestAnimationFrame(animate);
+                                        }
+
+                        } else if (action === 2) {
+
+                        } else if (action === 3) {
+
+                        } else if (action === 4) {
+
+                        }*/
+            let myList = allScanContent();
+            tail(myList);
+            let result = allScanChecker(myList);
+            if (back === undefined) {
+              if (result !== 0) {
+                let apple = document.getElementById('apple');
+                apple.textContent = apple.textContent - 1;
+                startAnimateDetail(currentTime, myList);
+              } else {
+                back = 1;
+                startTime = currentTime;
+                requestAnimationFrame(animate);
+              }
+            }
+          }
+        }
+        // アニメーションを開始
+        requestAnimationFrame(animate);
+      }
+      /*
+      function disappear(currentTime, intId, changeChara) {
+        for (let i = 0; i < 8; i++) {
+          let count = 0;
+          let has = 0;
+          let n = 0;
+          let up;
+          for (let j = 0; j < 9; j++) {
+            let charablank = document.getElementById(100);
+            let blank = charablank.src;
+            let number = i + 8 * j;
+            let allcheck = document.getElementById(number);
+            let allcheckblank = allcheck.src;
+            if (blank === allcheckblank) {
+              count = count + 1;
+            }
+            if (blank === allcheckblank && n === 0) {
+              up = number - 8;
+              n = 1;
+            }
+            if (intId + 1 === number) {
+              has = 1;
+            }
+          }
+          if (up !== undefined) {
+            let changeShape;
+            if (changeChara === 1 && has === 1) {
+              changeShape = 1;
+            } else {
+              changeShape = 0;
+            }
+            startAnimateDown(currentTime, up, count, changeShape, intId + 1); //注意
+          }
+        }
+      }
+ 
+function allScan(list) {
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (list[i + 8 * j] === 1) {
+        let current = i + 8 * j;
+        let allcheck = document.getElementById(current);
+        let charablank = document.getElementById(100);
+        allcheck.src = charablank.src;
+      }
+    }
+  }
+}
+*/
+      function allScanChecker(list) {
+        let count = 0;
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 9; j++) {
+            if (list[i + 8 * j] === 1) {
+              count += 1;
+            }
+          }
+        }
+        return count;
+      }
+
+      function allScanContent() {
+        const row = 9;
+        const column = 8;
+        let validIdsRight1 = Array.from({
+          length: row
+        }, (_, index) => (index + 1) * column - 1);
+
+        let validIdsRight2 = Array.from({
+          length: row
+        }, (_, index) => (index + 1) * column - 2);
+
+        let validIdsLeft1 = Array.from({
+          length: row
+        }, (_, index) => index * column);
+
+        let validIdsLeft2 = Array.from({
+          length: row
+        }, (_, index) => index * column + 1);
+
+        let validIdsDown1 = Array.from({
+          length: column
+        }, (_, index) => index + (row - 1) * column);
+
+        let validIdsDown2 = Array.from({
+          length: column
+        }, (_, index) => index + (row - 1) * column - 8);
+
+        let validIdsUp1 = Array.from({
+          length: column
+        }, (_, index) => index);
+
+        let validIdsUp2 = Array.from({
+          length: column
+        }, (_, index) => index + 8);
+
+        let list = [];
+        for (var c = 0; c <= 71; c++) {
+          list[c] = 0;
+        }
+
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 9; j++) {
+            let current = i + 8 * j;
+            let up1 = i + 8 * j - 8;
+            let up2 = i + 8 * j - 16;
+            let left1 = i + 8 * j - 1;
+            let left2 = i + 8 * j - 2;
+            let right1 = i + 8 * j + 1;
+            let right2 = i + 8 * j + 2;
+            let down1 = i + 8 * j + 8;
+            let down2 = i + 8 * j + 16;
+
+            let allcheck = document.getElementById(current);
+            let allchecksrc = allcheck.src;
+
+            if (!validIdsUp1.includes(current) && !validIdsUp2.includes(current)) {
+              //up
+              let up1check = document.getElementById(up1);
+              let up2check = document.getElementById(up2);
+              let up1checksrc = up1check.src;
+              let up2checksrc = up2check.src;
+              if (allchecksrc === up1checksrc && allchecksrc === up2checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+            if (!validIdsLeft1.includes(current) && !validIdsLeft2.includes(current)) {
+              //left
+              let left1check = document.getElementById(left1);
+              let left2check = document.getElementById(left2);
+              let left1checksrc = left1check.src;
+              let left2checksrc = left2check.src;
+              if (allchecksrc === left1checksrc && allchecksrc === left2checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+            if (!validIdsRight1.includes(current) && !validIdsRight2.includes(current)) {
+              //right
+              let right1check = document.getElementById(right1);
+              let right2check = document.getElementById(right2);
+              let right1checksrc = right1check.src;
+              let right2checksrc = right2check.src;
+              if (allchecksrc === right1checksrc && allchecksrc === right2checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+            if (!validIdsDown1.includes(current) && !validIdsDown2.includes(current)) {
+              //down
+              let down1check = document.getElementById(down1);
+              let down2check = document.getElementById(down2);
+              let down1checksrc = down1check.src;
+              let down2checksrc = down2check.src;
+              if (allchecksrc === down1checksrc && allchecksrc === down2checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+            if (!validIdsUp1.includes(current) && !validIdsDown1.includes(current)) {
+              //updownM
+              let up1check = document.getElementById(up1);
+              let up1checksrc = up1check.src;
+              let down1check = document.getElementById(down1);
+              let down1checksrc = down1check.src;
+              if (allchecksrc === up1checksrc && allchecksrc === down1checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+            if (!validIdsRight1.includes(current) && !validIdsLeft1.includes(current)) {
+              //leftrightM
+              let left1check = document.getElementById(left1);
+              let left1checksrc = left1check.src;
+              let right1check = document.getElementById(right1);
+              let right1checksrc = right1check.src;
+              if (allchecksrc === left1checksrc && allchecksrc === right1checksrc) {
+                list[i + 8 * j] = 1;
+              }
+            }
+          }
+        }
+        return list;
+      }
+
+      /*
+            function startAnimateDown(currentTime, up, count, changeShape, intId) {
+              let startTime;
+              let startTime2;
+              let countduration;
+              let countduration2;
+              let upelement;
+              let upelement2;
+              let downelement;
+              let downelement2;
+              let duration;
+              let duration2;
+              let progress;
+              let progress2;
+              let translateY;
+              let translate2Y;
+              let clock;
+              let elapsed2;
+
+              function animatedown(currentTime, up, count, changeShape, intId) {
+
+
+                if (!startTime) {
+                  startTime = currentTime;
+                }
+                const moving = 36;
+                const elapsed = currentTime - startTime;
+                translateY = 0;
+
+                if (up !== undefined && count !== undefined) {
+                  countduration = count;
+                  upelement = up;
+                }
+
+                downelement = upelement + 8 * countduration;
+                duration = 300 // + 150 * (countduration - 1);
+                progress = Math.min(elapsed / duration, 1);
+                translateY = -moving * countduration + moving * countduration * progress;
+
+
+                if (elapsed === 0) {
+                  for (let i = 0; i < Math.floor(upelement / 8) + countduration + 1; i++) {
+                    let downChange = document.getElementById(downelement - 8 * i);
+                    downChange.style.transform = `translate(0px, ${translateY}px)`;
+                    let downChangeImg = downChange.src;
+                    //console.log(Math.floor(upelement / 8));
+                    if (i < Math.floor(upelement / 8) + 1) {
+                      let upChange = document.getElementById(upelement - 8 * i);
+                      let upChangeImg = upChange.src;
+                      downChange.src = upChangeImg;
+                    } else {
+                      let min = 1;
+                      let max = 4;
+                      let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+                      if (randomInt === 1) {
+                        let animal1 = document.getElementById(101);
+                        downChange.src = animal1.src;
+                      } else if (randomInt === 2) {
+                        let animal2 = document.getElementById(102);
+                        downChange.src = animal2.src;
+                      } else if (randomInt === 3) {
+                        let animal3 = document.getElementById(103);
+                        downChange.src = animal3.src;
+                      } else if (randomInt === 4) {
+                        let animal4 = document.getElementById(104);
+                        downChange.src = animal4.src;
+                      }
+                    }
+                  }
+                } else {
+                  for (let i = 0; i < Math.floor(upelement / 8) + countduration + 1; i++) {
+                    let downChange = document.getElementById(downelement - 8 * i);
+                    downChange.style.transform = `translate(0px, ${translateY}px)`;
+                    if (downelement2 !== undefined) {
+                      let downChange2 = document.getElementById(downelement2 - 8 * i);
+                      downChange2.style.transform = `translate(0px, ${translateY}px)`;
+                    }
+                  }
+                }
+                if (progress < 1) {
+                  requestAnimationFrame(animatedown);
+                } else {
+                  let myList = allScanContent();
+                  let result = allScanChecker(myList);
+                  if (result > 1) {
+                    myList = allScanContent();
+                    result = allScanChecker(myList);
+                    allScan(myList);
+                    //startAnimateDown2(currentTime, myList);
+                    //disappear(currentTime, intId, changeChara);
+
+                  }
+                }
+              }
+              animatedown(currentTime, up, count, changeShape, intId);
+            }*/
+
+      function startAnimateDetail(currentTime, myList) {
+        let startTime;
+        let duration;
+        let progress;
+        let progress1;
+        let progress2;
+        let progress3;
+        let progress4;
+        let progress5;
+        let progress6;
+        let progress7;
+        let progress8;
+        let translateY;
+
+        for (let i = 7; i >= 0; i--) {
+          let count = 0;
+          for (let j = 8; j >= 0; j--) {
+            if (myList[i + 8 * j] === 1) {
+              count += 1;
+              myList[i + 8 * j] = 10;
+            } else {
+              myList[i + 8 * j] = count;
+            }
+          }
+        }
+
+        for (let i = 7; i >= 0; i--) {
+          let count = 0;
+          for (let j = 8; j >= 0; j--) {
+            if (myList[i + 8 * j] === 10) {
+              count++;
+            }
+            if (myList[i + 8 * j] === 1) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8);
+              translateY = -36;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 2) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 2);
+              translateY = -36 * 2;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 3) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 3);
+              translateY = -36 * 3;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 4) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 4);
+              translateY = -36 * 4;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 5) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 5);
+              translateY = -36 * 5;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 6) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 6);
+              translateY = -36 * 6;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 7) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 7);
+              translateY = -36 * 7;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+            if (myList[i + 8 * j] === 8) {
+              let currentElement = document.getElementById(i + 8 * j);
+              let downChange = document.getElementById(i + 8 * j + 8 * 8);
+              translateY = -36 * 8;
+              downChange.style.transform = `translate(0px, ${translateY}px)`;
+              downChange.src = currentElement.src;
+            }
+          }
+          for (h = 0; h < count; h++) {
+            let min = 1;
+            let max = 4;
+            let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+            let currentElement2 = document.getElementById(i + 8 * h);
+            if (randomInt === 1) {
+              let animal1 = document.getElementById(101);
+              currentElement2.src = animal1.src;
+            } else if (randomInt === 2) {
+              let animal2 = document.getElementById(102);
+              currentElement2.src = animal2.src;
+            } else if (randomInt === 3) {
+              let animal3 = document.getElementById(103);
+              currentElement2.src = animal3.src;
+            } else if (randomInt === 4) {
+              let animal4 = document.getElementById(104);
+              currentElement2.src = animal4.src;
+            }
+            translateY = -36 * (2 * h + 1);
+            currentElement2.style.transform = `translate(0px, ${translateY}px)`;
+          }
+        }
+
+        function animateDetail(currentTime, list) {
+          if (!startTime) {
+            startTime = currentTime;
+          }
+          if (list !== undefined) {
+            let myList = list;
+          }
+          const moving = 36;
+          const elapsed = currentTime - startTime;
+          translateY = 0;
+
+          duration = 1000;
+          progress = Math.min(elapsed / duration, 1);
+          progress1 = Math.min(elapsed / (duration / 8), 1);
+          progress2 = Math.min(elapsed / (duration * (2 / 8)), 1);
+          progress3 = Math.min(elapsed / (duration * (3 / 8)), 1);
+          progress4 = Math.min(elapsed / (duration * (4 / 8)), 1);
+          progress5 = Math.min(elapsed / (duration * (5 / 8)), 1);
+          progress6 = Math.min(elapsed / (duration * (6 / 8)), 1);
+          progress7 = Math.min(elapsed / (duration * (7 / 8)), 1);
+          progress8 = Math.min(elapsed / duration, 1);
+
+          for (let i = 7; i >= 0; i--) {
+            let count = 0;
+            for (let j = 8; j >= 0; j--) {
+              if (myList[i + 8 * j] === 10) {
+                count++;
+              }
+
+              if (myList[i + 8 * j] === 1) {
+                let downChange = document.getElementById(i + 8 * j + 8);
+                translateY = 36 * (progress1 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+
+              if (myList[i + 8 * j] === 2) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 2);
+                translateY = 36 * 2 * (progress2 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 3) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 3);
+                translateY = 36 * 3 * (progress3 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 4) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 4);
+                translateY = 36 * 4 * (progress4 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 5) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 5);
+                translateY = 36 * 5 * (progress5 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 6) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 6);
+                translateY = 36 * 6 * (progress6 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 7) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 7);
+                translateY = 36 * 7 * (progress7 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+              if (myList[i + 8 * j] === 8) {
+                let downChange = document.getElementById(i + 8 * j + 8 * 8);
+                translateY = 36 * 8 * (progress8 - 1);
+                downChange.style.transform = `translate(0px, ${translateY}px)`;
+              }
+            }
+
+            for (h = 0; h < count; h++) {
+              let currentElement2 = document.getElementById(i + 8 * h);
+              if (count === 1) {
+                translateY = 36 * count * (progress1 - 1);
+              }
+              if (count === 2) {
+                translateY = 36 * count * (progress2 - 1);
+              }
+              if (count === 3) {
+                translateY = 36 * count * (progress3 - 1);
+              }
+              if (count === 4) {
+                translateY = 36 * count * (progress4 - 1);
+              }
+              if (count === 5) {
+                translateY = 36 * count * (progress5 - 1);
+              }
+              if (count === 6) {
+                translateY = 36 * count * (progress6 - 1);
+              }
+              if (count === 7) {
+                translateY = 36 * count * (progress7 - 1);
+              }
+              if (count === 8) {
+                translateY = 36 * count * (progress8 - 1);
+              }
+              currentElement2.style.transform = `translate(0px, ${translateY}px)`;
+            }
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(animateDetail);
+          } else {
+            let myList = allScanContent();
+            tail(myList);
+            let result = allScanChecker(myList);
+            if (result !== 0) {
+              startAnimateDetail(currentTime, myList);
+            } else {
+              tailCheck(myList);
+            }
+          }
+        }
+        animateDetail(currentTime, myList);
+      }
+
+      function tail(myList) {
+        let count = 0;
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 9; j++) {
+            if (myList[i + 8 * j] === 1 && document.getElementById(i + 8 * j + 200).style.visibility !== 'hidden') {
+              document.getElementById(i + 8 * j + 200).style.visibility = 'hidden';
+              count++;
+            }
+          }
+        }
+        let target = document.getElementById('target');
+        target.textContent = target.textContent - count;
+      }
+
+      function tailCheck(myList) {
+        let target = document.getElementById('target');
+        let apple = document.getElementById('apple');
+        if (apple.textContent <= 0 && target.textContent >= 1) {
+          alert("ゲームオーバー");
+        }
+        if (target.textContent <= 0) {
+          alert("ステージクリア");
+        }
+      }
+
+      function character(n, l) {
+        let number = parseInt(touchedElementId, 10) + n + l;
+        let stringNumber = number.toString();
+        let newImagePath = 0;
+        let imageElement = 0;
+        if (stringNumber > 0 && stringNumber < 72) {
+          imageElement = document.getElementById(stringNumber);
+          newImagePath = imageElement.src;
+        }
+        return newImagePath;
+
+      }
+
+      function element(n, l) {
+        let number = parseInt(touchedElementId, 10) + n + l;
+        let stringNumber = number.toString();
+        let newImagePath = 0;
+        let imageElement = 0;
+        if (stringNumber > 0 && stringNumber < 72) {
+          imageElement = document.getElementById(stringNumber);
+        }
+        return imageElement;
+
+      }
+
+      document.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+      }, {
+        passive: false
+      });
+
+    }
+  </script>
+</body>
+
+</html>
