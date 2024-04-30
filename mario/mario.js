@@ -103,7 +103,7 @@ function mainloop(){
     // 変数をtrueに設定
     //keyb.Right = true;
 //}
-
+/*
 // タッチ開始
 document.getElementById("content").addEventListener('touchstart', logTouchStart);
 document.getElementById("content2").addEventListener('touchstart', logTouchStart2);
@@ -136,7 +136,28 @@ function logTouchStart3() {
 
 function logTouchEnd3() {
   keyb.ABUTTON = false;
-}
+}*/
+
+// 複数のコンテンツを対象としたタッチイベント
+const touchTargets = ["content", "content2", "content3"];
+
+// タッチ開始イベントを設定
+touchTargets.forEach((target, index) => {
+  const element = document.getElementById(target);
+  // タッチ開始イベント
+  element.addEventListener('touchstart', () => {
+    if (index === 0) keyb.Left = true;
+    if (index === 1) keyb.Right = true;
+    if (index === 2) keyb.ABUTTON = true;
+  });
+
+  // タッチ終了イベント
+  element.addEventListener('touchend', () => {
+    if (index === 0) keyb.Left = false;
+    if (index === 1) keyb.Right = false;
+    if (index === 2) keyb.ABUTTON = false;
+  });
+});
 
 
 document.onkeydown = function(e){
