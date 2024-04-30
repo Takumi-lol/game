@@ -139,7 +139,7 @@ function logTouchEnd3() {
 }*/
 
 // 複数のコンテンツを対象としたタッチイベント
-const touchTargets = ["content", "content2", "content3"];
+const touchTargets = ["content1", "content2", "content3"];
 
 // タッチ開始イベントを設定
 touchTargets.forEach((target, index) => {
@@ -182,3 +182,9 @@ document.onkeyup = function(e){
   if(e.keyCode == 90)keyb.BBUTTON = false;
   if(e.keyCode == 88)keyb.ABUTTON = false;
 }
+
+document.querySelectorAll('.no-select').forEach(element => {
+  element.addEventListener('touchstart', (event) => {
+    event.preventDefault(); // 長押しによるテキスト選択を防ぐ
+  });
+});
