@@ -137,7 +137,7 @@ function logTouchStart3() {
 function logTouchEnd3() {
   keyb.ABUTTON = false;
 }*/
-/*
+
 // 複数のコンテンツを対象としたタッチイベント
 const touchTargets = ["content1", "content2", "content3"];
 
@@ -158,45 +158,7 @@ touchTargets.forEach((target, index) => {
     if (index === 2) keyb.ABUTTON = false;
   });
 });
-*/
-touchTargets.forEach((target, index) => {
-  const element = document.getElementById(target);
-  element.addEventListener('touchstart', (event) => {
-    event.preventDefault(); // デフォルト動作を防ぐ
-    event.targetTouches.forEach((touch) => {
-      const targetId = touch.target.id;
-      switch (targetId) {
-        case "content1":
-          keyb.Left = true;
-          break;
-        case "content2":
-          keyb.Right = true;
-          break;
-        case "content3":
-          keyb.ABUTTON = true;
-          break;
-      }
-    });
-  });
 
-  // タッチ終了イベント
-  element.addEventListener('touchend', (event) => {
-    event.targetTouches.forEach((touch) => {
-      const targetId = touch.target.id;
-      switch (targetId) {
-        case "content1":
-          keyb.Left = false;
-          break;
-        case "content2":
-          keyb.Right = false;
-          break;
-        case "content3":
-          keyb.ABUTTON = false;
-          break;
-      }
-    });
-  });
-});
 
 document.onkeydown = function(e){
   if(kaeru.gameover2 !== 1){
