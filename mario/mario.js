@@ -99,11 +99,26 @@ function mainloop(){
 }
 
 // ボタンがクリックされたときに呼び出される関数
-function handleRightButtonClick() {
+//function handleRightButtonClick() {
     // 変数をtrueに設定
-    keyb.Right = true;
+    //keyb.Right = true;
+//}
+
+// タッチ開始
+document.getElementById("content1").addEventListener('touchstart', logTouchStart);
+
+// タッチ終了
+document.getElementById("content1").addEventListener('touchend', logTouchEnd);
+
+function logTouchStart() {
+  console.log("タッチ開始");
+  keyb.Right = true;
 }
 
+function logTouchEnd() {
+  keyb.Right = false;
+  console.log("タッチ終了");
+}
 
 document.onkeydown = function(e){
   if(kaeru.gameover2 !== 1){
