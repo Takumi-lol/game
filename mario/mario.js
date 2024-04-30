@@ -98,6 +98,32 @@ function mainloop(){
   requestAnimationFrame(mainloop);
 }
 
+// ボタンがクリックされたときに呼び出される関数
+//function handleRightButtonClick() {
+    // 変数をtrueに設定
+  //  keyb.Right = true;
+//}
+
+// ボタンを押したときに `Right` を `true` にする
+function handleRightButtonDown() {
+  keyb.Right = true;
+}
+
+// ボタンを離したときに `Right` を `false` にする
+function handleRightButtonUp() {
+  keyb.Right = false;
+}
+
+// ボタンのイベントリスナーを設定
+const rightButton = document.getElementById("right");
+rightButton.addEventListener("mousedown", handleRightButtonDown); // ボタンを押したとき
+rightButton.addEventListener("mouseup", handleRightButtonUp); // ボタンを離したとき
+
+// ドラッグも考慮して、ボタン外で離した場合をハンドリング
+document.addEventListener("mouseup", function() {
+  keyb.Right = false; // 他の場所でマウスを離したときも `Right` を `false` にする
+});
+
 document.onkeydown = function(e){
   if(kaeru.gameover2 !== 1){
   if(e.keyCode == 37)keyb.Left = true;
