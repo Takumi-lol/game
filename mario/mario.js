@@ -188,3 +188,10 @@ document.querySelectorAll('.no-select').forEach(element => {
     event.preventDefault(); // 長押しによるテキスト選択を防ぐ
   });
 });*/
+
+document.body.addEventListener("touchstart", function(e){
+  e.preventDefault();
+});
+document.body.addEventListener("touchmove", function(e){
+  e.preventDefault();
+});
