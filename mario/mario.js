@@ -159,7 +159,7 @@ touchTargets.forEach((target, index) => {
   });
 });
 
-
+/*
 document.onkeydown = function(e){
   if(kaeru.gameover2 !== 1){
   if(e.keyCode == 37)keyb.Left = true;
@@ -181,7 +181,7 @@ document.onkeyup = function(e){
   if(e.keyCode == 39)keyb.Right = false;
   if(e.keyCode == 90)keyb.BBUTTON = false;
   if(e.keyCode == 88)keyb.ABUTTON = false;
-}
+}*/
 /*
 document.querySelectorAll('.no-select').forEach(element => {
   element.addEventListener('touchstart', (event) => {
