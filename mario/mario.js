@@ -105,20 +105,39 @@ function mainloop(){
 //}
 
 // タッチ開始
-document.getElementById("content1").addEventListener('touchstart', logTouchStart);
+document.getElementById("content").addEventListener('touchstart', logTouchStart);
+document.getElementById("content2").addEventListener('touchstart', logTouchStart2);
+document.getElementById("content3").addEventListener('touchstart', logTouchStart3);
 
 // タッチ終了
-document.getElementById("content1").addEventListener('touchend', logTouchEnd);
+document.getElementById("content").addEventListener('touchend', logTouchEnd);
+document.getElementById("content2").addEventListener('touchend', logTouchEnd2);
+document.getElementById("content3").addEventListener('touchend', logTouchEnd3);
 
 function logTouchStart() {
-  console.log("タッチ開始");
-  keyb.Right = true;
+  keyb.Left = true;
 }
 
 function logTouchEnd() {
-  keyb.Right = false;
-  console.log("タッチ終了");
+  keyb.Left = false;
 }
+
+function logTouchStart2() {
+  keyb.Right = true;
+}
+
+function logTouchEnd2() {
+  keyb.Right = false;
+}
+
+function logTouchStart3() {
+  keyb.ABUTTON = true;
+}
+
+function logTouchEnd3() {
+  keyb.ABUTTON = false;
+}
+
 
 document.onkeydown = function(e){
   if(kaeru.gameover2 !== 1){
